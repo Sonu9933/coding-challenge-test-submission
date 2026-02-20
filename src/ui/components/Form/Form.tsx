@@ -1,15 +1,13 @@
-import React, { FunctionComponent } from 'react';
-import { InputHTMLAttributes } from 'react';
+import React, { FunctionComponent } from "react";
+import { InputHTMLAttributes } from "react";
 
-import Button from '../Button/Button';
-import InputText from '../InputText/InputText';
-import $ from './Form.module.css';
+import Button from "../Button/Button";
+import $ from "./Form.module.css";
+import InputText from "../InputText/InputText";
 
 interface FormEntry {
   name: string;
   placeholder: string;
-  // TODO: Defined a suitable type for extra props
-  // This type should cover all different of attribute types
   extraProps?: InputHTMLAttributes<HTMLInputElement>;
 }
 
@@ -26,26 +24,28 @@ const Form: FunctionComponent<FormProps> = ({
   loading,
   formEntries,
   onFormSubmit,
-  submitText
+  submitText,
 }) => {
   return (
     <form onSubmit={onFormSubmit}>
       <fieldset>
         <legend>{label}</legend>
         {formEntries.map(({ name, placeholder, extraProps }, index) => {
-  const { value, onChange, ...rest } = extraProps || {};
-  return (
-    <div key={`${name}-${index}`} className={$.formRow}>
-      <InputText
-        name={name}
-        placeholder={placeholder}
-        value={(value as string) ?? ""}
-        onChange={onChange as any}
-        {...(rest as any)}
-      />
-    </div>
-  );
-})}
+          const { value, onChange, ...rest } = extraProps || {};
+          const safeValue =
+            value === undefined || value === null ? "" : String(value);
+          return (
+            <div key={`${name}-${index}`} className={$.formRow}>
+              <InputText
+                name={name}
+                placeholder={placeholder}
+                value={safeValue}
+                onChange={onChange as any}
+                {...(rest as any)}
+              />
+            </div>
+          );
+        })}
 
         <Button loading={loading} type="submit">
           {submitText}
@@ -64,9 +64,7 @@ interface FormFields {
 export function useForm(initialValues: FormFields) {
   const [values, setValues] = React.useState(initialValues);
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setValues((prevValues) => ({
       ...prevValues,
