@@ -7,7 +7,7 @@ import InputText from "@/components/InputText/InputText";
 import Radio from "@/components/Radio/Radio";
 import Section from "@/components/Section/Section";
 import useAddressBook from "@/hooks/useAddressBook";
-import {useForm} from "@/components/Form/Form";
+import useForm from "@/components/Form/UseForm";
 import ErrorMessage from "@/components/ErrorMessage/ErrorMessage";
 
 import styles from "./App.module.css";
